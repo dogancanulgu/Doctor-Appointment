@@ -2,6 +2,11 @@
   padding: 20px;
 }
 
+.logo {
+  color: white;
+  font-weight: bold;
+}
+
 .sidebar {
   background-color: #005555;
   border-radius: 5px;
@@ -72,7 +77,7 @@
 }
 
 @media screen and (max-width: 768px) {
-.menu {
-  padding: 0 5px;
-}  
+  .menu {
+    padding: 0 5px;
+  }
 }

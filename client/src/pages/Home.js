@@ -14,12 +14,11 @@ const Home = () => {
           },
         }
       );
-      console.log(response.data);
     } catch (error) {}
   };
 
   useEffect(() => {
-    getData();
+    // getData();
   }, []);
   return (
     <Layout>

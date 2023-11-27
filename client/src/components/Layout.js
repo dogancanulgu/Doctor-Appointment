@@ -1,59 +1,42 @@
 import React, { useState } from 'react';
 import '../layout.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { adminMenu, userMenu } from '../mock/LayoutMenu';
 
 const Layout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { user } = useSelector((state) => state.user);
   const location = useLocation();
-  const userMenu = [
-    {
-      name: 'Home',
-      path: '/',
-      icon: 'ri-home-line',
-    },
-    {
-      name: 'Appointments',
-      path: '/appointments',
-      icon: 'ri-file-list-line',
-    },
-    {
-      name: 'Apply Doctor',
-      path: '/apply-doctor',
-      icon: 'ri-hospital-line',
-    },
-    {
-      name: 'Profile',
-      path: '/profile',
-      icon: 'ri-user-line',
-    },
-    {
-      name: 'Logout',
-      path: '/logout',
-      icon: 'ri-logout-box-r-line',
-    },
-  ];
+  const navigate = useNavigate();
+  const menuToBeRendered = user?.isAdmin ? adminMenu : userMenu;
 
-  const menuToBeRendered = userMenu;
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   return (
     <div className='main p-2'>
       <div className='d-flex layout'>
         <div className='sidebar'>
           <div className='sidebar-header'>
-            <h1>DU</h1>
+            <h1 className='logo'>DU</h1>
           </div>
           <div className='menu'>
             {menuToBeRendered.map((menu) => {
               const isActive = location.pathname === menu.path;
               return (
-                <div className={`d-flex menu-item ${isActive && 'active-menu-item'}`}>
+                <div key={menu.path} className={`d-flex menu-item ${isActive && 'active-menu-item'}`}>
                   <i className={menu.icon}></i>
                   {!isCollapsed && <Link to={menu.path}>{menu.name}</Link>}
                 </div>
               );
             })}
+            <div className='d-flex menu-item' onClick={handleLogout}>
+              <i className='ri-logout-circle-line'></i>
+              {!isCollapsed && <Link to='/login'>Logout</Link>}
+            </div>
           </div>
         </div>
         <div className='content'>
@@ -63,7 +46,7 @@ const Layout = ({ children }) => {
               onClick={() => setIsCollapsed(!isCollapsed)}
             ></i>
             <div className='d-flex align-items-center px-4'>
-              <i class='ri-notification-line header-action-icon px-3'></i>
+              <i className='ri-notification-line header-action-icon px-3'></i>
               <Link className='anchor' to='/profile'>
                 {user?.name}
               </Link>
