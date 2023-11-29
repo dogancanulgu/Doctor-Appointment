@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/userModel');
+const Doctor = require('../models/doctorModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authMiddlewares = require('../middlewares/authMiddleware');
@@ -57,6 +58,34 @@ router.post('/get-user-info-by-id', authMiddlewares, async (req, res) => {
     }
   } catch (error) {
     res.status(500).send({ message: 'Error getting user info', success: false, error });
+  }
+});
+
+router.post('/apply-doctor-account', authMiddlewares, async (req, res) => {
+  try {
+    const newDoctor = new Doctor({ ...req.body, status: 'pending' });
+    await newDoctor.save();
+
+    console.log("0")
+
+    const adminUser = await User.findOne({ isAdmin: true });
+    console.log("1")
+    const unseenNotifications = adminUser.unseenNotifications;
+    unseenNotifications.push({
+      type: 'new-doctor-request',
+      message: `${newDoctor.firstName} ${newDoctor.lastName} has applied for a doctor account`,
+      data: {
+        doctorId: newDoctor._id,
+        name: newDoctor.firstName + ' ' + newDoctor.lastName,
+      },
+      onClickPath: '/admin/doctors',
+    });
+    await User.findByIdAndUpdate(adminUser._id, { unseenNotifications });
+    console.log("2")
+    res.status(200).send({ success: true, message: 'Doctor account applied successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Error applying doctor account', success: false, error });
   }
 });
 

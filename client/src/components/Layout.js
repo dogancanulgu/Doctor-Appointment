@@ -3,6 +3,7 @@ import '../layout.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { adminMenu, userMenu } from '../mock/LayoutMenu';
+import { Badge } from 'antd';
 
 const Layout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -46,8 +47,10 @@ const Layout = ({ children }) => {
               onClick={() => setIsCollapsed(!isCollapsed)}
             ></i>
             <div className='d-flex align-items-center px-4'>
-              <i className='ri-notification-line header-action-icon px-3'></i>
-              <Link className='anchor' to='/profile'>
+              <Badge count={user?.unseenNotifications?.length}>
+                <i className='ri-notification-line header-action-icon px-3'></i>
+              </Badge>
+              <Link className='anchor mx-2' to='/profile'>
                 {user?.name}
               </Link>
             </div>
