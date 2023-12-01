@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import '../layout.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { adminMenu, userMenu } from '../mock/LayoutMenu';
 import { Badge } from 'antd';
+import { setUser } from '../redux/userSlice';
 
 const Layout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const menuToBeRendered = user?.isAdmin ? adminMenu : userMenu;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    dispatch(setUser(null))
     navigate('/login');
   };
 
@@ -47,7 +50,7 @@ const Layout = ({ children }) => {
               onClick={() => setIsCollapsed(!isCollapsed)}
             ></i>
             <div className='d-flex align-items-center px-4'>
-              <Badge count={user?.unseenNotifications?.length}>
+              <Badge count={user?.unseenNotifications?.length} onClick={() => navigate('/notifications')}>
                 <i className='ri-notification-line header-action-icon px-3'></i>
               </Badge>
               <Link className='anchor mx-2' to='/profile'>

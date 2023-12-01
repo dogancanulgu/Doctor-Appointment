@@ -66,10 +66,7 @@ router.post('/apply-doctor-account', authMiddlewares, async (req, res) => {
     const newDoctor = new Doctor({ ...req.body, status: 'pending' });
     await newDoctor.save();
 
-    console.log("0")
-
     const adminUser = await User.findOne({ isAdmin: true });
-    console.log("1")
     const unseenNotifications = adminUser.unseenNotifications;
     unseenNotifications.push({
       type: 'new-doctor-request',
@@ -81,11 +78,38 @@ router.post('/apply-doctor-account', authMiddlewares, async (req, res) => {
       onClickPath: '/admin/doctors',
     });
     await User.findByIdAndUpdate(adminUser._id, { unseenNotifications });
-    console.log("2")
     res.status(200).send({ success: true, message: 'Doctor account applied successfully' });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Error applying doctor account', success: false, error });
+  }
+});
+
+router.post('/mark-unseen-notifications-as-seen', authMiddlewares, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.body.userId });
+    const unseenNotifications = user.unseenNotifications;
+    user.seenNotifications.push(...unseenNotifications);
+    user.unseenNotifications = [];
+    await user.save()
+    delete user.password;
+    res.status(200).send({ success: true, message: 'All notifications marked as seen.', data: user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Error marking unseen notifications', success: false, error });
+  }
+});
+
+router.post('/delete-seen-notifications', authMiddlewares, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.body.userId });
+    user.seenNotifications = [];
+    await user.save()
+    delete user.password;
+    res.status(200).send({ success: true, message: 'All notifications deleted.', data: user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Error deleting seen notifications', success: false, error });
   }
 });
 
