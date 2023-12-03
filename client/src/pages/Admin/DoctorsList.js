@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../../redux/alertsSlice';
 import axios from 'axios';
 import { Table } from 'antd';
+import toast from 'react-hot-toast';
 
 const DoctorsList = () => {
   const [doctors, setDoctors] = useState([]);
@@ -27,6 +28,30 @@ const DoctorsList = () => {
     }
   };
 
+  const changeDoctorStatus = async (record, status) => {
+    try {
+      dispatch(showLoading());
+      const response = await axios.post(
+        '/api/admin/change-doctor-status',
+        { doctorId: record._id, userId: record.userId, status },
+        {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+        }
+      );
+      dispatch(hideLoading());
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getDoctorsData();
+      }
+    } catch (error) {
+      toast.error('Error changing doctor status');
+      dispatch(hideLoading());
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getDoctorsData();
   }, []);
@@ -40,10 +65,6 @@ const DoctorsList = () => {
           {record.firstName} {record.lastName}
         </span>
       ),
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
     },
     {
       title: 'Phone',
@@ -62,8 +83,16 @@ const DoctorsList = () => {
       dataIndex: 'actions',
       render: (text, record) => (
         <div className='d-flex'>
-          {record.status === 'pending' && <h1 className='anchor'>Approve</h1>}
-          {record.status === 'approved' && <h1 className='anchor'>Block</h1>}
+          {record.status === 'pending' && (
+            <h1 className='anchor' onClick={() => changeDoctorStatus(record, 'approved')}>
+              Approve
+            </h1>
+          )}
+          {record.status === 'approved' && (
+            <h1 className='anchor' onClick={() => changeDoctorStatus(record, 'blocked')}>
+              Block
+            </h1>
+          )}
         </div>
       ),
     },
