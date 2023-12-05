@@ -67,7 +67,7 @@ label {
   font-size: 1rem;
 }
 .card {
-  box-shadow: 0 0 2px gray;
+  box-shadow: 0 0 2px rgb(189, 188, 188);
   border-radius: 0 !important;
 }
 
@@ -81,6 +81,12 @@ label {
   width: max-content !important;
 }
 
+p {
+  color: rgba(0, 0, 0, 0.673) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .anchor {
   color: black !important;
   text-decoration: underline;
@@ -90,6 +96,10 @@ label {
 
 .anchor:hover {
   text-decoration: underline !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 /* authentication pages */

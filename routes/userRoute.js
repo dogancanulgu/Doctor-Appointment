@@ -113,4 +113,14 @@ router.post('/delete-seen-notifications', authMiddlewares, async (req, res) => {
   }
 });
 
+router.get('/get-all-approved-doctors', authMiddlewares, async (req, res) => {
+  try {
+    const doctors = await Doctor.find({status: "approved"});
+    res.status(200).send({ success: true, message: 'Aprroved doctors fetched successfully', data: doctors });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Error fetching all approved doctors', success: false, error });
+  }
+});
+
 module.exports = router;
