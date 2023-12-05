@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../layout.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { adminMenu, userMenu } from '../mock/LayoutMenu';
+import { adminMenu, doctorMenu, userMenu } from '../mock/LayoutMenu';
 import { Badge } from 'antd';
 import { setUser } from '../redux/userSlice';
 
@@ -12,7 +12,8 @@ const Layout = ({ children }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const menuToBeRendered = user?.isAdmin ? adminMenu : userMenu;
+  const menuToBeRendered = user?.isAdmin ? adminMenu : user?.isDoctor ? doctorMenu(user) : userMenu;
+  const role = user?.isAdmin ? "Admin" : user?.isDoctor ? "Doctor" : "User";
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -26,6 +27,7 @@ const Layout = ({ children }) => {
         <div className='sidebar'>
           <div className='sidebar-header'>
             <h1 className='logo'>DU</h1>
+            <h1 className="role">{role}</h1>
           </div>
           <div className='menu'>
             {menuToBeRendered.map((menu) => {

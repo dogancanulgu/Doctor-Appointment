@@ -1,5 +1,5 @@
 import { Button, Col, Form, Input, Row, TimePicker } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 
 function DoctorForm({ onFinish, initivalValues }) {
@@ -10,7 +10,7 @@ function DoctorForm({ onFinish, initivalValues }) {
       initialValues={{
         ...initivalValues,
         ...(initivalValues && {
-          timings: [moment(initivalValues?.timings[0], 'HH:mm'), moment(initivalValues?.timings[1], 'HH:mm')],
+          timings: [dayjs(initivalValues?.timings[0], 'HH:mm'), dayjs(initivalValues?.timings[1], 'HH:mm')],
         }),
       }}
     >

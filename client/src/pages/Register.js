@@ -16,7 +16,6 @@ const Register = () => {
       dispatch(hideLoading());
       if (response.data.success) {
         toast.success(response.data.message);
-        toast('Redirecting to login page');
         setTimeout(() => {
           navigate('/login');
         }, 1000);

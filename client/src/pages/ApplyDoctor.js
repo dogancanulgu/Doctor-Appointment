@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import DoctorForm from '../components/DoctorForm';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { hideLoading, showLoading } from '../redux/alertsSlice';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -17,7 +18,11 @@ const ApplyDoctor = () => {
       dispatch(showLoading());
       const response = await axios.post(
         '/api/user/apply-doctor-account',
-        { ...values, userId: user._id },
+        {
+          ...values,
+          userId: user._id,
+          timings: [dayjs(values.timings[0]).format('HH:mm'), dayjs(values.timings[1]).format('HH:mm')],
+        },
         {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
