@@ -130,6 +130,10 @@ function BookAppointment() {
                 <b>Timings :</b> {doctor.timings[0]} - {doctor.timings[1]}
               </h1>
               <p>
+                <b>Specialization : </b>
+                {doctor.specialization}
+              </p>
+              <p>
                 <b>Phone Number : </b>
                 {doctor.phoneNumber}
               </p>
@@ -156,6 +160,9 @@ function BookAppointment() {
                 <TimePicker
                   format='HH:mm'
                   className='mt-3'
+                  minuteStep={15}
+                  disabledHours={() => [1, 2, 3]}
+
                   onChange={(value) => {
                     setIsAvailable(false);
                     setTime(dayjs(value).format('HH:mm'));

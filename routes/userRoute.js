@@ -149,8 +149,8 @@ router.post('/book-appointment', authMiddlewares, async (req, res) => {
 router.post('/check-booking-availability', authMiddlewares, async (req, res) => {
   try {
     const date = moment(req.body.date, 'DD-MM-YYYY').toISOString();
-    const fromTime = moment(req.body.time, 'HH:mm').subtract(30, 'minutes').toISOString();
-    const toTime = moment(req.body.time, 'HH:mm').add(30, 'minutes').toISOString();
+    const fromTime = moment(req.body.time, 'HH:mm').subtract(14, 'minutes').toISOString();
+    const toTime = moment(req.body.time, 'HH:mm').add(14, 'minutes').toISOString();
     const doctorId = req.body.doctorId;
     const appointment = await Appointment.find({
       doctorId,

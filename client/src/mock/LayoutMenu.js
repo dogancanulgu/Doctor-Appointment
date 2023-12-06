@@ -14,11 +14,6 @@ export const userMenu = [
     path: '/apply-doctor',
     icon: 'ri-hospital-line',
   },
-  {
-    name: 'Profile',
-    path: '/profile',
-    icon: 'ri-user-line',
-  },
 ];
 
 export const doctorMenu = (user) => {
@@ -56,10 +51,5 @@ export const adminMenu = [
     name: 'Doctors',
     path: '/admin/doctorslist',
     icon: 'ri-user-star-line',
-  },
-  {
-    name: 'Profile',
-    path: '/profile',
-    icon: 'ri-user-line',
   },
 ];

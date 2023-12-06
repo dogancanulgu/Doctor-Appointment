@@ -36,6 +36,8 @@ const Home = () => {
 
   return (
     <Layout>
+      <h1 className='page-title'>Approved Doctor List</h1>
+      <hr />
       <Row gutter={20}>
         {doctors.map((doctor) => (
           <Col span={8} xs={24} sm={24} lg={8}>

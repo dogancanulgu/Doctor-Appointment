@@ -44,6 +44,7 @@
   height: 82vh;
   width: 100%;
   padding: 15px;
+  /* overflow-x: auto; */
 }
 
 .menu {
