@@ -148,17 +148,24 @@ router.post('/book-appointment', authMiddlewares, async (req, res) => {
 
 router.post('/check-booking-availability', authMiddlewares, async (req, res) => {
   try {
+    if(req.body.time == null || req.body.date == null) {
+      return res.status(200).send({ success: false, message: 'Field can not be empty' });
+    }
     const date = moment(req.body.date, 'DD-MM-YYYY').toISOString();
     const fromTime = moment(req.body.time, 'HH:mm').subtract(14, 'minutes').toISOString();
     const toTime = moment(req.body.time, 'HH:mm').add(14, 'minutes').toISOString();
+
     const doctorId = req.body.doctorId;
+    const doctors = await Doctor.findOne({ _id: doctorId });
+    const isDateBeforeShift = moment(req.body.time, 'HH:mm').isBefore(moment(doctors.timings[0], 'HH:mm'));
+    const isDateAfterShift = moment(req.body.time, 'HH:mm').isAfter(moment(doctors.timings[1], 'HH:mm'));
     const appointment = await Appointment.find({
       doctorId,
       date: { $gte: date, $lte: date },
       time: { $gte: fromTime, $lte: toTime },
     });
 
-    if (appointment.length > 0) {
+    if (appointment.length > 0 || isDateBeforeShift || isDateAfterShift) {
       return res.status(200).send({ success: false, message: 'Appointment not available' });
     } else {
       return res.status(200).send({ success: true, message: 'Appointment available' });

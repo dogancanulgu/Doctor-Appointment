@@ -5,7 +5,8 @@ import { useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../redux/alertsSlice';
 import toast from 'react-hot-toast';
 import Doctor from '../components/Doctor';
-import { Col, Row } from 'antd';
+import { Col, Row, Select } from 'antd';
+import { listOfClinics } from '../mock/LayoutMenu';
 
 const Home = () => {
   const [doctors, setDoctors] = useState([]);
@@ -33,10 +34,26 @@ const Home = () => {
   useEffect(() => {
     getData();
   }, []);
-
+  
   return (
     <Layout>
-      <h1 className='page-title'>Approved Doctor List</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h1 className='page-title'>Approved Doctor List</h1>
+        <Select
+          showSearch
+          style={{
+            width: 200,
+          }}
+          placeholder='Search to Policlinics'
+          optionFilterProp='children'
+          filterOption={(input, option) => (option?.label ?? '').includes(input)}
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+          }
+          options={listOfClinics}
+        />
+      </div>
+
       <hr />
       <Row gutter={20}>
         {doctors.map((doctor) => (

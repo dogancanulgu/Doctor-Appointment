@@ -6,13 +6,13 @@
 
 /* anntd override */
 
-input {
+input:not([class^="ant-select"]) {
   border-radius: 2px !important;
   border: 1px solid rgba(128, 128, 128, 0.521) !important;
   height: 40px !important;
 }
 
-input:focus,
+input:focus:not([class^="ant-select"]),
 .ant-picker {
   outline: none !important;
   box-shadow: none !important;

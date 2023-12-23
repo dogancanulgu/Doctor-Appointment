@@ -47,7 +47,6 @@ router.post('/change-appointment-status', authMiddlewares, async (req, res) => {
   try {
     const { appointmentId, status } = req.body;
     const appointment = await Appointment.findByIdAndUpdate(appointmentId, { status });
-
     const user = await User.findOne({ _id: appointment.userId });
     const unseenNotifications = user.unseenNotifications;
     unseenNotifications.push({

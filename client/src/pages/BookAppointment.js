@@ -161,8 +161,26 @@ function BookAppointment() {
                   format='HH:mm'
                   className='mt-3'
                   minuteStep={15}
-                  disabledHours={() => [1, 2, 3]}
-
+                  // disabledHours={() => [1, 2, 3]}
+                  disabledHours={() =>
+                    [...Array(24).keys()].filter(
+                      (hour) =>
+                        hour < doctor.timings[0].split(':')[0] || doctor.timings[1].split(':')[0] < hour
+                    )
+                  }
+                  disabledMinutes={(hour) => {
+                    let minutes = [];
+                    const [firstHour, firstMinutes] = doctor.timings[0].split(':');
+                    const [secondHour, secondMinutes] = doctor.timings[1].split(':');
+                    if (hour == firstHour && hour == secondHour) {
+                      minutes = [0, 15, 30, 45].filter((minute) => minute < firstMinutes && secondMinutes < minute);
+                    } else if (hour == firstHour) {
+                      minutes = [0, 15, 30, 45].filter((minute) => minute < firstMinutes);
+                    } else if (hour == secondHour) {
+                      minutes = [0, 15, 30, 45].filter((minute) => secondMinutes < minute);
+                    }
+                    return minutes;
+                  }}
                   onChange={(value) => {
                     setIsAvailable(false);
                     setTime(dayjs(value).format('HH:mm'));
