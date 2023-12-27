@@ -11,6 +11,7 @@ const doctorSchema = new mongoose.Schema(
     experience: { type: String, required: true },
     feePerCunsultation: { type: Number, required: true },
     timings: { type: Array, required: true },
+    workingDays: { type: Array, required: true },
     status: { type: String, default: "pending" },
   },
   {

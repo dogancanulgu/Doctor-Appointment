@@ -6,18 +6,18 @@
 
 /* anntd override */
 
-input:not([class^="ant-select"]) {
+/* input:not([class^='ant-select']) {
   border-radius: 2px !important;
   border: 1px solid rgba(128, 128, 128, 0.521) !important;
   height: 40px !important;
 }
 
-input:focus:not([class^="ant-select"]),
+input:focus:not([class^='ant-select']),
 .ant-picker {
   outline: none !important;
   box-shadow: none !important;
   border: 1px solid gray !important;
-}
+} */
 
 label {
   font-size: 16px !important;
@@ -129,4 +129,27 @@ p {
   padding: 7px 15px;
   margin-left: -30px;
   border-bottom-left-radius: 10px;
+}
+
+
+.workdays {
+  display: inline-flex;
+}
+
+.day {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 8px;
+  background-color: lightgray;
+}
+
+.working {
+  background-color: green;
+  color: white;
 }

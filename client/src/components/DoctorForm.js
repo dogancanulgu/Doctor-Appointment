@@ -1,6 +1,7 @@
-import { Button, Col, Form, Input, Row, TimePicker } from 'antd';
+import { Button, Checkbox, Col, Form, Input, Row, Select, TimePicker } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
+import { listOfClinics } from '../mock/LayoutMenu';
 
 function DoctorForm({ onFinish, initivalValues }) {
   return (
@@ -18,27 +19,27 @@ function DoctorForm({ onFinish, initivalValues }) {
       <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='First Name' name='firstName' rules={[{ required: true }]}>
-            <Input placeholder='First Name' />
+            <Input size='large' placeholder='First Name' />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='Last Name' name='lastName' rules={[{ required: true }]}>
-            <Input placeholder='Last Name' />
+            <Input size='large' placeholder='Last Name' />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='Phone Number' name='phoneNumber' rules={[{ required: true }]}>
-            <Input placeholder='Phone Number' />
+            <Input size='large' placeholder='Phone Number' />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='Website' name='website' rules={[{ required: true }]}>
-            <Input placeholder='Website' />
+            <Input size='large' placeholder='Website' />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='Address' name='address' rules={[{ required: true }]}>
-            <Input placeholder='Address' />
+            <Input size='large' placeholder='Address' />
           </Form.Item>
         </Col>
       </Row>
@@ -47,12 +48,22 @@ function DoctorForm({ onFinish, initivalValues }) {
       <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='Specialization' name='specialization' rules={[{ required: true }]}>
-            <Input placeholder='Specialization' />
+            <Select
+              size='large'
+              showSearch
+              placeholder='Search to Policlinics'
+              optionFilterProp='children'
+              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+              }
+              options={listOfClinics}
+            />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='Experience' name='experience' rules={[{ required: true }]}>
-            <Input placeholder='Experience' type='number' />
+            <Input size='large' placeholder='Experience' type='number' min={0} />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
@@ -62,12 +73,25 @@ function DoctorForm({ onFinish, initivalValues }) {
             name='feePerCunsultation'
             rules={[{ required: true }]}
           >
-            <Input placeholder='Fee Per Cunsultation' type='number' />
+            <Input size='large' placeholder='Fee Per Cunsultation' type='number' min={0} />
+          </Form.Item>
+        </Col>
+        <Col span={8} xs={48} sm={48} lg={16}>
+          <Form.Item required label='Days' name='workingDays' rules={[{ required: true }]}>
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Checkbox value={1}>Monday</Checkbox>
+              <Checkbox value={2}>Tuesday</Checkbox>
+              <Checkbox value={3}>Wednesday</Checkbox>
+              <Checkbox value={4}>Thursday</Checkbox>
+              <Checkbox value={5}>Friday</Checkbox>
+              <Checkbox value={6}>Saturday</Checkbox>
+              <Checkbox value={7}>Sunday</Checkbox>
+            </Checkbox.Group>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item required label='Timings' name='timings' rules={[{ required: true }]}>
-            <TimePicker.RangePicker format='HH:mm' />
+            <TimePicker.RangePicker size='large' format='HH:mm' minuteStep={15} />
           </Form.Item>
         </Col>
       </Row>

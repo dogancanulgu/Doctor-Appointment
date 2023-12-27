@@ -13,11 +13,11 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const menuToBeRendered = user?.isAdmin ? adminMenu : user?.isDoctor ? doctorMenu(user) : userMenu;
-  const role = user?.isAdmin ? "Admin" : user?.isDoctor ? "Doctor" : "User";
+  const role = user?.isAdmin ? 'Admin' : user?.isDoctor ? 'Doctor' : 'User';
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    dispatch(setUser(null))
+    dispatch(setUser(null));
     navigate('/login');
   };
 
@@ -26,8 +26,12 @@ const Layout = ({ children }) => {
       <div className='d-flex layout'>
         <div className='sidebar'>
           <div className='sidebar-header'>
-            <h1 className='logo'>DU</h1>
-            <h1 className="role">{role}</h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {!isCollapsed && <h1 className='logo'>Meet My Doctor</h1>}
+              <img src='/logo.png' alt='logo' style={{ flexShrink: 0, height: '80px' }} />
+            </div>
+
+            <h1 className='role'>{role}</h1>
           </div>
           <div className='menu'>
             {menuToBeRendered.map((menu) => {
@@ -55,7 +59,7 @@ const Layout = ({ children }) => {
               <Badge count={user?.unseenNotifications?.length} onClick={() => navigate('/notifications')}>
                 <i className='ri-notification-line header-action-icon px-3'></i>
               </Badge>
-              <Link className='anchor mx-2' to='/profile'>
+              <Link className='anchor mx-2' to={user?.isDoctor ? `/doctor/profile/${user?._id}` : '/'}>
                 {user?.name}
               </Link>
             </div>

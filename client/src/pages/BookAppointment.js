@@ -7,6 +7,9 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { listOfClinics } from '../mock/LayoutMenu';
+import isoWeek from 'dayjs/plugin/isoWeek';
+dayjs.extend(isoWeek);
 
 function BookAppointment() {
   const [isAvailable, setIsAvailable] = useState(false);
@@ -131,7 +134,7 @@ function BookAppointment() {
               </h1>
               <p>
                 <b>Specialization : </b>
-                {doctor.specialization}
+                {listOfClinics.find((x) => x.value == doctor.specialization)?.label ?? doctor.specialization}
               </p>
               <p>
                 <b>Phone Number : </b>
@@ -149,9 +152,28 @@ function BookAppointment() {
                 <b>Website : </b>
                 {doctor.website}
               </p>
+              <p>
+                <b>Days : </b>
+                <b className='workdays'>
+                  {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
+                    <b
+                      key={index}
+                      className={`day ${doctor.workingDays.includes(index + 1) ? 'working' : ''}`}
+                    >
+                      {day}
+                    </b>
+                  ))}
+                </b>
+              </p>
               <div className='d-flex flex-column pt-2 mt-2'>
                 <DatePicker
                   format='DD-MM-YYYY'
+                  disabledDate={(current) => {
+                    return (
+                      (current && current < dayjs().endOf('day')) ||
+                      !doctor?.workingDays?.includes(dayjs(current).isoWeekday())
+                    );
+                  }}
                   onChange={(value) => {
                     setDate(dayjs(value).format('DD-MM-YYYY'));
                     setIsAvailable(false);
@@ -161,26 +183,53 @@ function BookAppointment() {
                   format='HH:mm'
                   className='mt-3'
                   minuteStep={15}
-                  // disabledHours={() => [1, 2, 3]}
-                  disabledHours={() =>
-                    [...Array(24).keys()].filter(
-                      (hour) =>
-                        hour < doctor.timings[0].split(':')[0] || doctor.timings[1].split(':')[0] < hour
-                    )
-                  }
-                  disabledMinutes={(hour) => {
-                    let minutes = [];
-                    const [firstHour, firstMinutes] = doctor.timings[0].split(':');
-                    const [secondHour, secondMinutes] = doctor.timings[1].split(':');
-                    if (hour == firstHour && hour == secondHour) {
-                      minutes = [0, 15, 30, 45].filter((minute) => minute < firstMinutes && secondMinutes < minute);
-                    } else if (hour == firstHour) {
-                      minutes = [0, 15, 30, 45].filter((minute) => minute < firstMinutes);
-                    } else if (hour == secondHour) {
-                      minutes = [0, 15, 30, 45].filter((minute) => secondMinutes < minute);
-                    }
-                    return minutes;
+                  hideDisabledOptions={true}
+                  disabledTime={() => {
+                    return {
+                      disabledHours: () =>
+                        [...Array(24).keys()].filter(
+                          (hour) =>
+                            hour < doctor.timings[0].split(':')[0] || doctor.timings[1].split(':')[0] < hour
+                        ),
+                      disabledMinutes: (hour) => {
+                        let minutes = [];
+                        const [firstHour, firstMinutes] = doctor.timings[0].split(':');
+                        const [secondHour, secondMinutes] = doctor.timings[1].split(':');
+                        if (hour == firstHour && hour == secondHour) {
+                          minutes = [0, 15, 30, 45].filter(
+                            (minute) => minute < firstMinutes && secondMinutes < minute
+                          );
+                        } else if (hour == firstHour) {
+                          minutes = [0, 15, 30, 45].filter((minute) => minute < firstMinutes);
+                        } else if (hour == secondHour) {
+                          minutes = [0, 15, 30, 45].filter((minute) => secondMinutes < minute);
+                        }
+                        return minutes;
+                      },
+                    };
                   }}
+                  // disabledHours={() => [1, 2, 3]}
+                  // disabledHours={() =>
+                  //   [...Array(24).keys()].filter(
+                  //     (hour) =>
+                  //       hour < doctor.timings[0].split(':')[0] || doctor.timings[1].split(':')[0] < hour
+                  //   )
+                  // }
+                  // disabledMinutes={(hour) => {
+                  //   let minutes = [];
+                  //   const [firstHour, firstMinutes] = doctor.timings[0].split(':');
+                  //   const [secondHour, secondMinutes] = doctor.timings[1].split(':');
+                  //   if (hour == firstHour && hour == secondHour) {
+                  //     minutes = [0, 15, 30, 45].filter(
+                  //       (minute) => minute < firstMinutes && secondMinutes < minute
+                  //     );
+                  //   } else if (hour == firstHour) {
+                  //     minutes = [0, 15, 30, 45].filter((minute) => minute < firstMinutes);
+                  //   } else if (hour == secondHour) {
+                  //     minutes = [0, 15, 30, 45].filter((minute) => secondMinutes < minute);
+                  //   }
+                  //   return minutes;
+                  // }}
                   onChange={(value) => {
                     setIsAvailable(false);
                     setTime(dayjs(value).format('HH:mm'));

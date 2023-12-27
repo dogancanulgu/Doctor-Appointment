@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { Table } from 'antd';
 import moment from 'moment';
+import { listOfAppointmentStatus } from '../../mock/LayoutMenu';
 
 function DoctorAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -14,14 +15,14 @@ function DoctorAppointments() {
   const getAppointmentsData = async () => {
     try {
       dispatch(showLoading());
-      const resposne = await axios.get('/api/doctor/get-appointments-by-doctor-id', {
+      const response = await axios.get('/api/doctor/get-appointments-by-doctor-id', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
       dispatch(hideLoading());
-      if (resposne.data.success) {
-        setAppointments(resposne.data.data);
+      if (response.data.success) {
+        setAppointments(response.data.data);
       }
     } catch (error) {
       dispatch(hideLoading());
@@ -31,7 +32,7 @@ function DoctorAppointments() {
   const changeAppointmentStatus = async (record, status) => {
     try {
       dispatch(showLoading());
-      const resposne = await axios.post(
+      const response = await axios.post(
         '/api/doctor/change-appointment-status',
         { appointmentId: record._id, status: status },
         {
@@ -41,8 +42,8 @@ function DoctorAppointments() {
         }
       );
       dispatch(hideLoading());
-      if (resposne.data.success) {
-        toast.success(resposne.data.message);
+      if (response.data.success) {
+        toast.success(response.data.message);
         getAppointmentsData();
       }
     } catch (error) {
@@ -53,18 +54,14 @@ function DoctorAppointments() {
 
   const columns = [
     {
-      title: 'Id',
-      dataIndex: '_id',
-    },
-    {
       title: 'Patient',
       dataIndex: 'name',
       render: (text, record) => <span>{record.userInfo.name}</span>,
     },
     {
-      title: 'Phone',
-      dataIndex: 'phoneNumber',
-      render: (text, record) => <span>{record.doctorInfo.phoneNumber}</span>,
+      title: 'Patient Email',
+      dataIndex: 'patientEmail',
+      render: (text, record) => <span>{record.userInfo.email}</span>,
     },
     {
       title: 'Date & Time',
@@ -78,6 +75,9 @@ function DoctorAppointments() {
     {
       title: 'Status',
       dataIndex: 'status',
+      render: (text, record) => (
+        <span>{listOfAppointmentStatus.find((x) => x.value === record.status)?.label ?? record.status}</span>
+      ),
     },
     {
       title: 'Actions',
@@ -107,7 +107,7 @@ function DoctorAppointments() {
     <Layout>
       <h1 className='page-title'>Appointments</h1>
       <hr />
-      <Table columns={columns} dataSource={appointments} />
+      <Table rowKey='_id' columns={columns} dataSource={appointments} />
     </Layout>
   );
 }

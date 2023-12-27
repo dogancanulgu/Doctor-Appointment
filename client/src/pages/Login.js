@@ -3,7 +3,7 @@ import { Button, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../redux/alertsSlice';
 
 const Login = () => {
@@ -23,6 +23,7 @@ const Login = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      dispatch(hideLoading());
       toast.error('Something went wrong');
     }
   };
@@ -33,10 +34,10 @@ const Login = () => {
         <h1 className='card-title'>Welcome Back</h1>
         <Form layout='vertical' onFinish={onFinish}>
           <Form.Item label='Email' name='email'>
-            <Input placeholder='Email' />
+            <Input size="large" placeholder='Email' />
           </Form.Item>
           <Form.Item label='Password' name='password'>
-            <Input placeholder='Password' type='password' />
+            <Input size="large" placeholder='Password' type='password' />
           </Form.Item>
           <div className='d-flex justify-content-between align-items-center'>
             <Link to='/register' className='anchor'>

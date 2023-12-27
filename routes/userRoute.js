@@ -10,6 +10,9 @@ const moment = require('moment');
 
 router.post('/register', async (req, res) => {
   try {
+    if(!(req.body.email || req.body.password)) {
+      return res.status(200).send({ message: 'Field can not be empty', success: false });
+    }
     const userExists = await User.findOne({ email: req.body.email });
     if (userExists) {
       return res.status(200).send({ message: 'User already exists', success: false });
@@ -29,6 +32,9 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
+    if(!(req.body.email || req.body.password)) {
+      return res.status(200).send({ message: 'Field can not be empty', success: false });
+    }
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
       return res.status(200).send({ message: 'User does not exist', success: false });
@@ -115,9 +121,16 @@ router.post('/delete-seen-notifications', authMiddlewares, async (req, res) => {
   }
 });
 
-router.get('/get-all-approved-doctors', authMiddlewares, async (req, res) => {
+router.get('/get-doctors-by-filter', authMiddlewares, async (req, res) => {
   try {
-    const doctors = await Doctor.find({ status: 'approved' });
+    const query = {};
+    if (req.query.status) {
+      Object.assign(query, { status: req.query.status });
+    }
+    if (req.query.specialization) {
+      Object.assign(query, { specialization: req.query.specialization });
+    }
+    const doctors = await Doctor.find(query);
     res.status(200).send({ success: true, message: 'Aprroved doctors fetched successfully', data: doctors });
   } catch (error) {
     console.log(error);
@@ -148,13 +161,12 @@ router.post('/book-appointment', authMiddlewares, async (req, res) => {
 
 router.post('/check-booking-availability', authMiddlewares, async (req, res) => {
   try {
-    if(req.body.time == null || req.body.date == null) {
+    if (req.body.time == null || req.body.date == null || req.body.time == 'Invalid Date' || req.body.date == 'Invalid Date') {
       return res.status(200).send({ success: false, message: 'Field can not be empty' });
     }
     const date = moment(req.body.date, 'DD-MM-YYYY').toISOString();
-    const fromTime = moment(req.body.time, 'HH:mm').subtract(14, 'minutes').toISOString();
+    const fromTime = moment(req.body.time, 'HH:mm').toISOString();
     const toTime = moment(req.body.time, 'HH:mm').add(14, 'minutes').toISOString();
-
     const doctorId = req.body.doctorId;
     const doctors = await Doctor.findOne({ _id: doctorId });
     const isDateBeforeShift = moment(req.body.time, 'HH:mm').isBefore(moment(doctors.timings[0], 'HH:mm'));
@@ -164,7 +176,6 @@ router.post('/check-booking-availability', authMiddlewares, async (req, res) => 
       date: { $gte: date, $lte: date },
       time: { $gte: fromTime, $lte: toTime },
     });
-
     if (appointment.length > 0 || isDateBeforeShift || isDateAfterShift) {
       return res.status(200).send({ success: false, message: 'Appointment not available' });
     } else {
@@ -179,6 +190,28 @@ router.post('/check-booking-availability', authMiddlewares, async (req, res) => 
 router.get('/get-appointments-by-user-id', authMiddlewares, async (req, res) => {
   try {
     const appointments = await Appointment.find({ userId: req.body.userId });
+    res.status(200).send({ success: true, message: 'Appointments fetched successfully', data: appointments });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Error fetching appointments', success: false, error });
+  }
+});
+
+router.get('/get-all-appointments-by-filter', authMiddlewares, async (req, res) => {
+  try {
+    const query = {};
+    if (req.query.status) {
+      Object.assign(query, { status: req.query.status });
+    }
+    if (req.query.specialization) {
+      Object.assign(query, { 'doctorInfo.specialization': req.query.specialization });
+    }
+    if (req.query.from && req.query.to) {
+      const from = moment(req.query.from, 'DD-MM-YYYY').toISOString();
+      const to = moment(req.query.to, 'DD-MM-YYYY').toISOString();
+      Object.assign(query, { date: { $gte: from, $lte: to } });
+    }
+    const appointments = await Appointment.find(query);
     res.status(200).send({ success: true, message: 'Appointments fetched successfully', data: appointments });
   } catch (error) {
     console.log(error);

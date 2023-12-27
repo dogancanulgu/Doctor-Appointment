@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../../redux/alertsSlice';
 import axios from 'axios';
 import { Table } from 'antd';
+import moment from 'moment';
 
 const UsersList = () => {
   const [users, setUsers] = useState([]);
@@ -15,6 +16,10 @@ const UsersList = () => {
       const response = await axios.get('/api/admin/get-all-users', {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+        params: {
+          isAdmin: false,
+          isDoctor: false,
         },
       });
       dispatch(hideLoading());
@@ -43,14 +48,10 @@ const UsersList = () => {
     {
       title: 'Created At',
       dataIndex: 'createdAt',
-    },
-    {
-      title: 'Actions',
-      dataIndex: 'actions',
       render: (text, record) => (
-        <div className='d-flex'>
-          <h1 className='anchor'>Block</h1>
-        </div>
+        <span>
+          {moment(record.date).format('DD-MM-YYYY')} {moment(record.time).format('HH:mm')}
+        </span>
       ),
     },
   ];

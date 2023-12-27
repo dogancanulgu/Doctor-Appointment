@@ -67,7 +67,7 @@ function Notifications() {
       <h1 className='page-title'>Notifications</h1>
       <hr />
 
-      <Tabs>
+      {/* <Tabs>
         <Tabs.TabPane tab='Unseen' key={0}>
           <div className='d-flex justify-content-end'>
             <h1 className='anchor' onClick={() => markAllAsSeen()}>
@@ -101,7 +101,56 @@ function Notifications() {
             </div>
           ))}
         </Tabs.TabPane>
-      </Tabs>
+      </Tabs> */}
+      <Tabs
+        items={[
+          {
+            key: 0,
+            label: 'Unseen',
+            children: (
+              <>
+                <div className='d-flex justify-content-end'>
+                  <h1 className='anchor' onClick={() => markAllAsSeen()}>
+                    Mark all as seen
+                  </h1>
+                </div>
+
+                {user?.unseenNotifications.map((notification, index) => (
+                  <div
+                    key={index}
+                    className='card p-2 mt-2'
+                    onClick={() => notification?.onClickPath && navigate(notification.onClickPath)}
+                  >
+                    <div className='card-text'>{notification.message}</div>
+                  </div>
+                ))}
+              </>
+            ),
+          },
+          {
+            key: 1,
+            label: 'Seen',
+            children: (
+              <>
+                <div className='d-flex justify-content-end'>
+                  <h1 className='anchor' onClick={() => deleteAll()}>
+                    Delete all
+                  </h1>
+                </div>
+                {user?.seenNotifications.map((notification, index) => (
+                  <div
+                    key={index}
+                    className='card p-2 mt-2'
+                    onClick={() => notification?.onClickPath && navigate(notification.onClickPath)}
+                  >
+                    <div className='card-text'>{notification.message}</div>
+                  </div>
+                ))}
+              </>
+            ),
+          },
+        ]}
+      />
     </Layout>
   );
 }

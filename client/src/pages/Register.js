@@ -24,6 +24,7 @@ const Register = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      dispatch(hideLoading());
       toast.error('Something went wrong');
     }
   };
@@ -34,13 +35,13 @@ const Register = () => {
         <h1 className='card-title'>Nice To Meet You</h1>
         <Form layout='vertical' onFinish={onFinish}>
           <Form.Item label='Name' name='name'>
-            <Input placeholder='Name' />
+            <Input size="large" placeholder='Name' />
           </Form.Item>
           <Form.Item label='Email' name='email'>
-            <Input placeholder='Email' />
+            <Input size="large" placeholder='Email' />
           </Form.Item>
           <Form.Item label='Password' name='password'>
-            <Input placeholder='Password' type='password' />
+            <Input size="large" placeholder='Password' type='password' />
           </Form.Item>
           <div className='d-flex justify-content-between align-items-center'>
             <Link to='/login' className='anchor'>

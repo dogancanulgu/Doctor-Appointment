@@ -4,8 +4,9 @@ import Layout from '../components/Layout';
 import { showLoading, hideLoading } from '../redux/alertsSlice';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
-import { Table } from 'antd';
+import { DatePicker, Table } from 'antd';
 import moment from 'moment';
+import { listOfAppointmentStatus, listOfClinics } from '../mock/LayoutMenu';
 
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
@@ -30,8 +31,14 @@ function Appointments() {
 
   const columns = [
     {
-      title: 'Id',
-      dataIndex: '_id',
+      title: 'Specialization',
+      dataIndex: 'specialization',
+      render: (text, record) => (
+        <span>
+          {listOfClinics.find((x) => x.value == record.doctorInfo.specialization)?.label ??
+            record.doctorInfo.specialization}
+        </span>
+      ),
     },
     {
       title: 'Doctor',
@@ -59,6 +66,9 @@ function Appointments() {
     {
       title: 'Status',
       dataIndex: 'status',
+      render: (text, record) => (
+        <span>{listOfAppointmentStatus.find((x) => x.value === record.status)?.label ?? record.status}</span>
+      ),
     },
   ];
 
@@ -70,7 +80,7 @@ function Appointments() {
     <Layout>
       <h1 className='page-title'>Appointments</h1>
       <hr />
-      <Table columns={columns} dataSource={appointments} />
+      <Table rowKey='_id' columns={columns} dataSource={appointments} />
     </Layout>
   );
 }

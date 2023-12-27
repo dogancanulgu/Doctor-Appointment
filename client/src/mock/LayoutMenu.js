@@ -38,6 +38,11 @@ export const doctorMenu = (user) => {
       path: `/doctor/profile/${user?._id}`,
       icon: 'ri-user-line',
     },
+    {
+      name: 'Reports',
+      path: '/reports',
+      icon: 'ri-file-chart-line',
+    },
   ];
 };
 
@@ -56,6 +61,16 @@ export const adminMenu = [
     name: 'Doctors',
     path: '/admin/doctorslist',
     icon: 'ri-user-star-line',
+  },
+  {
+    name: 'Appointments',
+    path: '/admin/appointments',
+    icon: 'ri-file-list-line',
+  },
+  {
+    name: 'Reports',
+    path: '/reports',
+    icon: 'ri-file-chart-line',
   },
 ];
 
@@ -377,3 +392,99 @@ export const listOfClinics = [
     value: 'radiology',
   },
 ];
+
+export const listOfQuestionsUser = [
+  {
+    value: 'count_appointment_by_doctor',
+    label: 'List the count of appointments by doctor',
+  },
+  {
+    value: 'count_appointments_by_policlinic',
+    label: 'List the count of appointments by policlinic',
+  },
+  {
+    value: 'count_doctor_by_policlinic',
+    label: 'List the count of doctor by policlinic',
+  },
+];
+
+export const listOfQuestionsDoctor = [
+  {
+    value: 'count_appointment_by_doctor',
+    label: 'List the count of appointments by doctor',
+  },
+  {
+    value: 'count_appointments_by_policlinic',
+    label: 'List the count of appointments by policlinic',
+  },
+  {
+    value: 'count_doctor_by_policlinic',
+    label: 'List the count of doctor by policlinic',
+  },
+];
+
+export const listOfQuestionsAdmin = [
+  {
+    value: 'count_appointment_by_doctor',
+    label: 'List the count of appointments by doctor',
+  },
+  {
+    value: 'count_appointment_by_user',
+    label: 'List the count of appointments by user',
+  },
+  {
+    value: 'count_appointments_by_policlinic',
+    label: 'List the count of appointments by policlinic',
+  },
+  {
+    value: 'count_doctor_by_policlinic',
+    label: 'List the count of doctor by policlinic',
+  },
+];
+
+export const listOfAppointmentStatus = [
+  {
+    value: 'approved',
+    label: 'Approved',
+  },
+  {
+    value: 'pending',
+    label: 'Pending',
+  },
+  {
+    value: 'rejected',
+    label: 'Rejected',
+  },
+];
+
+export const listOfDoctorStatus = [
+  {
+    value: 'approved',
+    label: 'Approved',
+  },
+  {
+    value: 'pending',
+    label: 'Pending',
+  },
+  {
+    value: 'blocked',
+    label: 'Blocked',
+  },
+];
+
+export const convertDaysToInteger = {
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+  sunday: 7,
+  1: 'Monday',
+  2: 'Tuesday',
+  3: 'Wednesday',
+  4: 'Thursday',
+  5: 'Friday',
+  6: 'Saturday',
+  7: 'Sunday',
+};

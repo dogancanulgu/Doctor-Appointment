@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { convertDaysToInteger, listOfClinics } from '../mock/LayoutMenu';
 
 function Doctor({ doctor }) {
   const navigate = useNavigate();
@@ -11,19 +12,25 @@ function Doctor({ doctor }) {
       <hr />
       <p>
         <b>Specialization : </b>
-        {doctor.specialization}
+        {listOfClinics.find((x) => x.value == doctor.specialization)?.label ?? doctor.specialization}
       </p>
       <p>
         <b>Phone Number : </b>
         {doctor.phoneNumber}
       </p>
       <p>
-        <b>Address : </b>
-        {doctor.address}
-      </p>
-      <p>
         <b>Fee per Visit : </b>
         {doctor.feePerCunsultation}
+      </p>
+      <p>
+        <b>Days : </b>
+        <b className='workdays'>
+          {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
+            <b key={index} className={`day ${doctor.workingDays.includes(index + 1) ? 'working' : ''}`}>
+              {day}
+            </b>
+          ))}
+        </b>
       </p>
       <p>
         <b>Timings : </b>
