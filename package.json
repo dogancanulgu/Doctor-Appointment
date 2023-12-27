@@ -1,11 +1,11 @@
 {
-  "name": "doctor-appointment",
+  "name": "meet-my-doctor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "install-server": "npm install",
-    "start-server": "node index.js",
+    "start-server": "node server.js",
     "install-client": "cd client && npm install",
     "build-client": "cd client && npm run build",
     "start-client": "cd client && npm run start"
