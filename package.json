@@ -2,10 +2,10 @@
   "name": "meet-my-doctor",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "install-server": "npm install",
-    "start-server": "node server.js",
+    "start-server": "node index.js",
     "install-client": "cd client && npm install",
     "build-client": "cd client && npm run build",
     "start-client": "cd client && npm run start"
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/dogancanulgu/Doctor-Appointment#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
