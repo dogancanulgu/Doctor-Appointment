@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { Button, DatePicker, Select, Table } from 'antd';
-import { useReactToPrint } from 'react-to-print';
 import {
   listOfAppointmentStatus,
   listOfClinics,

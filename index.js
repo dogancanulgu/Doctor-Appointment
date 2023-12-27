@@ -1,9 +1,7 @@
 const express = require('express');
-// const cors = require('cors');
 const app = express();
 require('dotenv').config();
 const dbConfig = require('./config/dbConfig');
-// app.use(cors());
 app.use(express.json());
 const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/adminRoute');
@@ -24,5 +22,5 @@ if (process.env.NODE_ENV === 'production') {
 
 const port = process.env.PORT || 5000;
 
-// app.get("/", (req, res) => res.send("Hello World!"));
+app.get("/", (req, res) => res.send("Hello World!"));
 app.listen(port, () => console.log(`Node server started at port ${port}`));
